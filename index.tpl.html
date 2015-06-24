@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Freifunk Planung</title>
+	<meta charset="utf-8" />
+    <link rel="stylesheet" href="leaflet.css" />
+	<link rel="stylesheet" href="leaflet.draw.css" />
+
+	<script src="leaflet.js"></script>
+	<script src="leaflet.draw.js"></script>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="leaflet.css" />
+</head>
+<body style="height: 100%; margin: 0;">
+	<div id="map" style="position:fixed; width: 100%; height: 100%;"></div>
+	<script>
+
+		var map = L.map('map').setView([51.454121, 7.012690], 13);
+
+		var layer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+          maxZoom: 25
+        }).addTo(map);
+
+		//L.marker([51.5, -0.09]).addTo(map).bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
+
+        var drawnItems = new L.FeatureGroup();
+		map.addLayer(drawnItems);
+
+        var drawControl = new L.Control.Draw({
+			draw: {
+				position: 'topleft',
+				polygon: {
+					title: 'Haus eintragen',
+					allowIntersection: false,
+					drawError: {
+						color: '#b00b00',
+						timeout: 1000
+					},
+					shapeOptions: {
+						color: '#ff0000'
+					},
+					showArea: false,
+				},
+                rectangle: false,
+				polyline: {
+					metric: true
+				},
+				circle: false,
+                marker: {
+                    title: 'Knoten eintragen'
+                }
+			}
+		});
+		map.addControl(drawControl);
+
+        map.on('draw:created', function (e) {
+            var type = e.layerType,
+                layer = e.layer;
+
+            if (type === 'marker') {
+                // Do marker specific actions
+            } else if (type === 'polygon') {
+                latlng = e.layer.toGeoJSON().geometry.coordinates[0];
+                latlng.pop();
+                for (var i=0;i<latlng.length;i++) {
+                    tmp = latlng[i][0]
+                    latlng[i][0] = Math.round(latlng[i][1]*1000000)/1000000;
+                    latlng[i][1] = Math.round(tmp*1000000)/1000000;
+                }
+                console.log(JSON.stringify(latlng));
+            }
+
+            // Do whatever else you need to. (save to db, add to map etc)
+            map.addLayer(layer);
+        });
+
+		/*
+        L.polygon([[51.460852,6.945248],[51.458285,6.957264],[51.449942,6.953487],[51.450905,6.946106]], { weight: 0, fillColor: '#ff0000', fillOpacity: 0.4 }).addTo(map).bindPopup("I am a polygon.");
+        */
+
+        /* add */
+
+
+		/*function onMapClick(e) {
+            console.log('['+String(Math.round(e.latlng.lat*1000000)/1000000)+', '+String(Math.round(e.latlng.lng*1000000)/1000000)+'],');
+			//popup.setLatLng(e.latlng).setContent("You clicked the map at " + e.latlng.toString()).openOn(map);
+		}
+
+		map.on('click', onMapClick);*/
+
+	</script>
+</body>
+</html>
