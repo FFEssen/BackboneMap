@@ -4,11 +4,12 @@
 <head>
 	<title>Freifunk Planung</title>
 	<meta charset="utf-8" />
-    <link rel="stylesheet" href="leaflet.css" />
-	<link rel="stylesheet" href="leaflet.draw.css" />
+    <link rel="stylesheet" href="static/leaflet.css" />
+	<link rel="stylesheet" href="static/leaflet.draw.css" />
 
-	<script src="leaflet.js"></script>
-	<script src="leaflet.draw.js"></script>
+	<script src="static/jquery.js"></script>
+	<script src="static/leaflet.js"></script>
+	<script src="static/leaflet.draw.js"></script>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -72,6 +73,11 @@
                     latlng[i][1] = Math.round(tmp*1000000)/1000000;
                 }
                 console.log(JSON.stringify(latlng));
+
+				stadtteil = prompt('Stadtteil:')
+				title = prompt('Titel:')
+
+				$.post('/building', {'stadtteil': stadtteil, 'title': title, 'coords': JSON.stringify(latlng)})
             }
 
             // Do whatever else you need to. (save to db, add to map etc)
