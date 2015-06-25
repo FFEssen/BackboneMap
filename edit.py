@@ -23,7 +23,7 @@ def building():
         return ''
 
     f = open(filename, 'w')
-    f.write(title+'\n'+coords+'\n\nKeine Notizen.')
+    f.write(title+'\n'+coords+'\n\nKeine Notizen.\n')
     f.close()
 
     make_leaflet()
