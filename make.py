@@ -14,7 +14,7 @@ def make_leaflet():
         for filename in filenames:
             data = open(os.path.join(dirpath, filename)).read()
             title, latlng, description = data.split('\n', 2)
-            add.append("L.polygon(%s, {weight: 0, fillColor: '%s', fillOpacity: 0.4}).addTo(map).bindPopup('<strong>%s</strong><br><br>%s');" % (latlng, buildings_color[dirpath[len(buildingsdir):]], title, description.strip().replace('\n', '<br>')))
+            add.append("L.polygon(%s, {weight: 3, color: '%s', fillColor: '%s', fillOpacity: 0.4}).addTo(map).bindPopup('<strong>%s</strong><br><br>%s');" % (latlng, buildings_color[dirpath[len(buildingsdir):]], buildings_color[dirpath[len(buildingsdir):]], title, description.strip().replace('\n', '<br>')))
 
     open('index.html', 'w').write(open('index.tpl.html').read().replace('/* add */', '\n'.join(add)))
 
